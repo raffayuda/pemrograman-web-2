@@ -8,6 +8,7 @@
 <body>
     <h1>Belajar Function</h1>
     <?php 
+    
         $nama= "Rizky";
         $umur = 19;
         $alamat = "Jl. Raya No. 1";
@@ -23,6 +24,10 @@
         foreach($array as $key => $value){
             echo "<p> $key : $value </p>";
         }
+
+        /*
+    Fungsi salam dengan parameter $nama
+    */
 
         function salam($nama="Boday"){
             echo "Hello, selamat datang $nama";
