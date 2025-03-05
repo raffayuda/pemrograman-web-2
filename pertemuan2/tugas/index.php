@@ -68,7 +68,7 @@
         echo "<p><strong>Nilai Total:</strong> " . number_format($nilai_total, 2) . "</p>";
         echo "<p><strong>Status:</strong> $status</p>";
         if ($nilai_total > 100 || $nilai_total < 0) {
-          $grade = "I"; // Grade "I" jika nilai total > 100 atau < 0
+          $grade = "I"; 
       } else if ($nilai_total >= 85) {
           $grade = "A";
       } else if ($nilai_total >= 70) {
@@ -78,7 +78,7 @@
       } else if ($nilai_total >= 36) {
           $grade = "D";
       } else {
-          $grade = "E"; // Grade "E" jika nilai total antara 0 dan 35
+          $grade = "E"; 
       }
       echo "<p><strong>Grade:</strong> $grade</p>";
 
