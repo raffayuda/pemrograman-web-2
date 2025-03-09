@@ -8,8 +8,7 @@
         <?php include "menu.php" ?>
         <!-- Page content-->
         <div class="container-fluid">
-            <h1 class="mt-4">Test</h1>
-            <?php include "../../../pertemuan1/praktikum/web01.php" ?>
+            <?php include "UTS/frontend/pages/index.php" ?>
         </div>
     </div>
 </div>
