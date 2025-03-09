@@ -8,7 +8,7 @@
         <?php include "menu.php" ?>
         <!-- Page content-->
         <div class="container-fluid">
-            <?php include "UTS/frontend/pages/index.php" ?>
+            <?php include "uts/frontend/pages/index.php" ?>
         </div>
     </div>
 </div>
