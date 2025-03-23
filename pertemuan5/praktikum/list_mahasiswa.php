@@ -1,7 +1,8 @@
 <?php 
 require_once 'dbkoneksi.php';
 
-$sql = "SELECT * FROM mahasiswa ORDER BY thn_masuk DESC";
+$sql = "SELECT * FROM mahasiswa"
+;
 $query = $dbh->query($sql);
 
 

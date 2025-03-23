@@ -1,18 +1,17 @@
 <?php
 require_once '../dbkoneksi.php';
-
-// Query to get all kelurahan records
-$sql = "SELECT k.*, COUNT(p.id) as jumlah_pasien 
-        FROM kelurahan k 
-        LEFT JOIN pasien p ON k.id = p.kelurahan_id 
-        GROUP BY k.id 
-        ORDER BY k.nama";
+$sql = "SELECT p.*, ps.nama as pasien_nama, d.nama as dokter_nama 
+        FROM periksa p 
+        LEFT JOIN pasien ps ON p.pasien_id = ps.id 
+        LEFT JOIN paramedik d ON p.dokter_id = d.id 
+        ORDER BY p.tanggal DESC";
 try {
     $rs = $dbh->query($sql);
 } catch (PDOException $e) {
     echo "Query error: " . $e->getMessage();
     die();
 }
+
 // Get status message if any
 $status = $_GET['status'] ?? '';
 $message = $_GET['message'] ?? '';
@@ -23,13 +22,13 @@ $message = $_GET['message'] ?? '';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelurahan Management</title>
+    <title>Pemeriksaan Management</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto p-4">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">Kelurahan Management</h1>
+            <h1 class="text-2xl font-bold">Pemeriksaan Management</h1>
             <a href="../index.php" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Back to Home</a>
         </div>
         
@@ -37,9 +36,9 @@ $message = $_GET['message'] ?? '';
         <div class="mb-4 p-4 rounded <?= $status == 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700' ?>">
             <?php 
                 switch($status) {
-                    case 'created': echo "Kelurahan successfully created!"; break;
-                    case 'updated': echo "Kelurahan successfully updated!"; break;
-                    case 'deleted': echo "Kelurahan successfully deleted!"; break;
+                    case 'created': echo "Pemeriksaan successfully created!"; break;
+                    case 'updated': echo "Pemeriksaan successfully updated!"; break;
+                    case 'deleted': echo "Pemeriksaan successfully deleted!"; break;
                     case 'error': echo $message; break;
                 }
             ?>
@@ -47,7 +46,7 @@ $message = $_GET['message'] ?? '';
         <?php endif; ?>
         
         <div class="mb-4">
-            <a href="form.php" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Add New Paramedik</a>
+            <a href="form.php" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Add New Pemeriksaan</a>
         </div>
         
         <div class="bg-white rounded-lg shadow overflow-hidden">
@@ -55,21 +54,26 @@ $message = $_GET['message'] ?? '';
                 <thead class="bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kecamatan ID</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Pasien</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pasien</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dokter</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Berat</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tinggi</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tensi</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                     </tr>
-
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
+                    <?php $no = 1; ?>
                     <?php while ($row = $rs->fetch(PDO::FETCH_ASSOC)): ?>
-                        <?php $no= 1; ?>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= $no++ ?></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><?= $row['nama'] ?></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= $row['kec_id'] ?></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= $row['jumlah_pasien'] ?></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><?= date('d-m-Y', strtotime($row['tanggal'])) ?></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><?= $row['pasien_nama'] ?></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= $row['dokter_nama'] ?></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= $row['berat'] ?? '-' ?> kg</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= $row['tinggi'] ?? '-' ?> cm</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= $row['tensi'] ?? '-' ?></td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <a href="view.php?id=<?= $row['id'] ?>" class="text-indigo-600 hover:text-indigo-900 mr-2">View</a>
                             <a href="form.php?id=<?= $row['id'] ?>" class="text-yellow-600 hover:text-yellow-900 mr-2">Edit</a>
