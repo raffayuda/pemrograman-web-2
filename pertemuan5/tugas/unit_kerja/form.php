@@ -1,10 +1,17 @@
 <?php
 require_once '../dbkoneksi.php';
+require_once '../components/config.php';
+
+// Set active menu
+setActiveMenu('unit_kerja');
 
 // Initialize variables
 $id = '';
 $nama = '';
 $form_action = 'create';
+
+// Set page title
+$page_title = ($form_action == 'create' ? 'Add New' : 'Edit') . ' Unit Kerja';
 
 // Check if we're editing an existing record
 if (isset($_GET['id'])) {
@@ -19,6 +26,8 @@ if (isset($_GET['id'])) {
     
     if ($row) {
         $nama = $row['nama'];
+        // Update page title for edit mode
+        $page_title = 'Edit Unit Kerja';
     } else {
         echo "Record not found.";
         exit;
@@ -31,11 +40,23 @@ if (isset($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $form_action == 'create' ? 'Add' : 'Edit' ?> Kelurahan</title>
+    <title><?php echo $page_title; ?></title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-100">
-    <div class="container mx-auto p-4">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <?php include_once '../components/sidebar.php'; ?>
+        
+        <!-- Main Content -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+            <!-- Top Navbar -->
+            <?php include_once '../components/navbar.php'; ?>
+            
+            <!-- Main Content -->
+            <main class="flex-1 overflow-y-auto p-6 bg-gray-100">
+                <div class="container mx-auto p-4">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold"><?= $form_action == 'create' ? 'Add New' : 'Edit' ?> Unit Kerja</h1>
             <a href="index.php" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Back to List</a>
@@ -62,6 +83,22 @@ if (isset($_GET['id'])) {
                 </div>
             </form>
         </div>
+                    </div>
+            </main>
+        </div>
     </div>
+    
+    <script>
+        // Simple toggle for mobile menu
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuButton = document.querySelector('#sidebarToggle');
+            const sidebar = document.querySelector('.md\\:flex-shrink-0');
+
+            menuButton.addEventListener('click', function() {
+                sidebar.classList.toggle('hidden');
+                sidebar.classList.toggle('md:flex');
+            });
+        });
+    </script>
 </body>
 </html>

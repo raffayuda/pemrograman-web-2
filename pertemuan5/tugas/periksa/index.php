@@ -1,5 +1,12 @@
 <?php
 require_once '../dbkoneksi.php';
+require_once '../components/config.php';
+
+// Set active menu
+setActiveMenu('periksa');
+
+// Set page title
+$page_title = 'Pemeriksaan Management';
 $sql = "SELECT p.*, ps.nama as pasien_nama, d.nama as dokter_nama 
         FROM periksa p 
         LEFT JOIN pasien ps ON p.pasien_id = ps.id 
@@ -22,11 +29,23 @@ $message = $_GET['message'] ?? '';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pemeriksaan Management</title>
+    <title><?php echo $page_title; ?></title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-100">
-    <div class="container mx-auto p-4">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <?php include_once '../components/sidebar.php'; ?>
+        
+        <!-- Main Content -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+            <!-- Top Navbar -->
+            <?php include_once '../components/navbar.php'; ?>
+            
+            <!-- Main Content -->
+            <main class="flex-1 overflow-y-auto p-6 bg-gray-100">
+                <div class="container mx-auto p-4">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold">Pemeriksaan Management</h1>
             <a href="../index.php" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Back to Home</a>
@@ -83,7 +102,22 @@ $message = $_GET['message'] ?? '';
                     <?php endwhile; ?>
                 </tbody>
             </table>
+                </div>
+            </main>
         </div>
     </div>
+    
+    <script>
+        // Simple toggle for mobile menu
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuButton = document.querySelector('#sidebarToggle');
+            const sidebar = document.querySelector('.md\\:flex-shrink-0');
+
+            menuButton.addEventListener('click', function() {
+                sidebar.classList.toggle('hidden');
+                sidebar.classList.toggle('md:flex');
+            });
+        });
+    </script>
 </body>
 </html>
