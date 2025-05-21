@@ -60,8 +60,8 @@ try {
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
+                                <?php $no = 1; ?>
                                 <?php while ($row = $rs->fetch(PDO::FETCH_ASSOC)): ?>
-                                    <?php $no = 1; ?>
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= $no++ ?></td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><?= $row['nama'] ?></td>
